@@ -29,10 +29,8 @@ struct ExperienceDetails: Codable {
 struct City: Codable {
     let id: Int
     let name: String
-    let topPick: Int
 
     enum CodingKeys: String, CodingKey {
         case id, name
-        case topPick = "top_pick"
     }
 }

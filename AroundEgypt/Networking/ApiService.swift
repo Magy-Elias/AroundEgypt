@@ -11,6 +11,11 @@ import Combine
 
 class ApiService {
     private let baseURL: String = "https://aroundegypt.34ml.com"
+    private let urlSession: URLSession
+    
+    init(session: URLSession = .shared) {
+        self.urlSession = session
+    }
 
     func fetchExperienceDetails(id: String) -> AnyPublisher<ExperienceDetailsResponse, Error> {
         let api = Api.experienceDetails(id: id)
@@ -30,7 +35,7 @@ class ApiService {
         }
 
         // Use URLSession's dataTaskPublisher to fetch image data
-        return URLSession.shared.dataTaskPublisher(for: url)
+        return urlSession.dataTaskPublisher(for: url)
             .tryMap { data, response in
                 // Check for valid HTTP response status codes
                 guard let httpResponse = response as? HTTPURLResponse,
@@ -60,7 +65,7 @@ class ApiService {
         request.httpMethod = method.rawValue
 
         // Perform the network request and decode the response
-        return URLSession.shared.dataTaskPublisher(for: request)
+        return urlSession.dataTaskPublisher(for: request)
             .tryMap { data, response in
                 // Check the response status code
                 guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
