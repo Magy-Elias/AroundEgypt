@@ -12,6 +12,16 @@ import Combine
 class ApiService {
     private let baseURL: String = "https://aroundegypt.34ml.com"
 
+    func fetchExperienceDetails(id: String) -> AnyPublisher<ExperienceDetailsResponse, Error> {
+        let api = Api.experienceDetails(id: id)
+        return performRequest(api: api, method: api.method)
+    }
+
+    func likeExperience(id: String) -> AnyPublisher<ExperienceLikesResponse, Error> {
+        let api = Api.likeExperience(id: id)
+        return performRequest(api: api, method: api.method)
+    }
+
     // Function to download an image from a URL
     func downloadImage(from imageUrl: String) -> AnyPublisher<UIImage?, Error> {
         guard let url = URL(string: imageUrl) else {
@@ -38,11 +48,6 @@ class ApiService {
                 error as Error
             }
             .eraseToAnyPublisher()
-    }
-
-    func fetchExperienceDetails(id: String) -> AnyPublisher<ExperienceDetailsResponse, Error> {
-        let api = Api.experienceDetails(id: id)
-        return performRequest(api: api, method: api.method)
     }
 
     private func performRequest<T: Codable>(api: Api, method: HTTPMethod = .get) -> AnyPublisher<T, Error> {

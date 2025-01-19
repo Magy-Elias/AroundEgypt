@@ -9,11 +9,14 @@ import Foundation
 
 enum Api {
     case experienceDetails(id: String)
+    case likeExperience(id: String)
     
     var url: String {
         switch self {
         case .experienceDetails(let id):
             return "/api/v2/experiences/\(id)"
+        case .likeExperience(let id):
+            return "/api/v2/experiences/\(id)/like"
         }
     }
 
@@ -21,6 +24,8 @@ enum Api {
         switch self {
         case .experienceDetails:
             return .get
+        case .likeExperience:
+            return .post
         }
     }
 }

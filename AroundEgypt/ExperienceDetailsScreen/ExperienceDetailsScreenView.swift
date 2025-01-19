@@ -8,19 +8,33 @@
 import SwiftUI
 
 struct ExperienceDetailsScreenView: View {
-    @StateObject private var viewModel = ExperienceDetailsScreenViewModel()
+    @StateObject private var viewModel: ExperienceDetailsScreenViewModel
+
+    init(experienceId: String) {
+        _viewModel = StateObject(wrappedValue: ExperienceDetailsScreenViewModel(experienceId: experienceId))
+    }
+    
 
     var body: some View {
         LazyVStack {
-            if let experienceDetails = viewModel.experienceDetails, let image = viewModel.image {
-                ExperienceImageView(image: image, viewCount: experienceDetails.viewsNo)
+            if let experienceDetails = viewModel.experienceDetails {
+                if let image = viewModel.image {
+                    ExperienceImageView(image: image, viewCount: experienceDetails.viewsNo)
+                }
 
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(alignment: .leading) {
-                        Text(experienceDetails.title)
-                            .bold()
+                        HStack {
+                            Text(experienceDetails.title)
+                                .bold()
+                            Spacer()
+
+                            likeView
+                        }
                         
                         Text("\(experienceDetails.city.name), Egypt.")
+                            .foregroundColor(.gray)
+                            .bold()
                     }
 
                     Divider()
@@ -42,9 +56,6 @@ struct ExperienceDetailsScreenView: View {
             }
         }
         .frame(maxHeight: .infinity, alignment: .top)
-        .onAppear {
-            viewModel.fetchExperienceDetails()
-        }
     }
 
     func drawErrorView(with errorMessage: String) -> some View {
@@ -57,8 +68,25 @@ struct ExperienceDetailsScreenView: View {
         Text("Loading...")
             .padding(.horizontal)
     }
+
+    var likeView: some View {
+        HStack {
+            Button(action: {
+                viewModel.likeExperience()
+            }, label: {
+                Image(systemName: viewModel.likeImage)
+                    .foregroundColor(.pink)
+                    .frame(width: 15, height: 15)
+            })
+            .disabled(viewModel.isLiked)
+            
+            if let likesNo = viewModel.likesNo {
+                Text(likesNo, format: .number)
+            }
+        }
+    }
 }
 
 #Preview {
-    ExperienceDetailsScreenView()
+    ExperienceDetailsScreenView(experienceId: "7f209d18-36a1-44d5-a0ed-b7eddfad48d6")
 }
