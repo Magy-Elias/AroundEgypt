@@ -2,7 +2,7 @@
 //  AroundEgyptUITestsLaunchTests.swift
 //  AroundEgyptUITests
 //
-//  Created by moweex on 19/01/2025.
+//  Created by MagyElias on 19/01/2025.
 //
 
 import XCTest
