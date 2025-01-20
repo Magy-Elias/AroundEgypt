@@ -6,33 +6,37 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct ExperienceImageView: View {
-    var image: UIImage
+    var imageURL: String // URL to the image
     var viewCount: Int
+    var showViewTitle: Bool
     
     var body: some View {
-        ZStack {
-            // Display the image
-            Image(uiImage: image)
+        ZStack(alignment: .bottomLeading) {
+            // Use Kingfisher to load the image asynchronously
+            KFImage(URL(string: imageURL))
+                .placeholder {
+                    ProgressView() // Placeholder while the image loads
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                .cacheOriginalImage() // Cache the original image for future use
                 .resizable()
                 .scaledToFill()
                 .clipped()
             
             // Eye icon overlay with the view count
-            VStack(alignment: .leading) {
-                Spacer()
-                HStack {
-                    Image(systemName: "eye.fill")
-                        .foregroundColor(.white)
-                        .frame(width: 15, height: 15)
-                    
-                    Text("\(viewCount) views")
-                        .foregroundColor(.white)
-                }
-                .padding(16)
+            HStack {
+                Image(systemName: "eye.fill")
+                    .foregroundColor(.white)
+                    .frame(width: 15, height: 15)
+                
+                Text("\(viewCount)\(showViewTitle ? " views" : "")")
+                    .foregroundColor(.white)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            .padding([.leading, .bottom], 16)
         }
     }
 }

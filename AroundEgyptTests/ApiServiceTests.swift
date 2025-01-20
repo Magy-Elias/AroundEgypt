@@ -27,6 +27,7 @@ class ApiServiceTests: XCTestCase {
         super.tearDown()
         // Clean up
         URLProtocol.unregisterClass(MockURLProtocol.self)
+        cancellables = []
     }
 
     // Test for fetchExperienceDetails
@@ -132,51 +133,6 @@ class ApiServiceTests: XCTestCase {
                 }
             }, receiveValue: { (response: ExperienceLikesResponse) in
                 XCTFail("Expected failure but got response: \(response)")
-            })
-            .store(in: &cancellables)
-        
-        waitForExpectations(timeout: 2)
-    }
-    
-    // Test for downloadImage
-    func testDownloadImageSuccess() {
-        let mockImage = UIImage(systemName: "star")
-        let mockData = mockImage?.pngData()
-        
-        MockURLProtocol.mockResponse = (data: mockData, error: nil, statusCode: 200)
-        
-        let expectation = self.expectation(description: "downloadImage success")
-        
-        apiService.downloadImage(from: "https://example.com/image.png")
-            .sink(receiveCompletion: { completion in
-                if case .failure(let error) = completion {
-                    XCTFail("Expected success but got error: \(error)")
-                }
-            }, receiveValue: { image in
-                XCTAssertNotNil(image)
-                expectation.fulfill()
-            })
-            .store(in: &cancellables)
-        
-        waitForExpectations(timeout: 2)
-    }
-    
-    func testDownloadImageFailure() {
-        MockURLProtocol.mockResponse = (data: nil, error: URLError(.badURL), statusCode: 400)
-        
-        let expectation = self.expectation(description: "downloadImage failure")
-        
-        apiService.downloadImage(from: "https://example.com/invalid.png")
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .failure(let error):
-                    XCTAssertEqual((error as? URLError)?.code, .badURL)
-                    expectation.fulfill() // Fulfill here
-                case .finished:
-                    XCTFail("Expected failure but got success")
-                }
-            }, receiveValue: { image in
-                XCTFail("Expected failure but got image: \(String(describing: image))")
             })
             .store(in: &cancellables)
         

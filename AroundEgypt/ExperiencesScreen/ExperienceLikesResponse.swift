@@ -6,5 +6,5 @@
 //
 
 struct ExperienceLikesResponse: Codable {
-    var data: Int
+    let data: Int
 }

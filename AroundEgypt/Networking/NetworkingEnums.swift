@@ -8,11 +8,20 @@
 import Foundation
 
 enum Api {
+    case recommendedExperiences
+    case recentExperiences
+    case searchExperiences(searchText: String)
     case experienceDetails(id: String)
     case likeExperience(id: String)
     
     var url: String {
         switch self {
+        case .recommendedExperiences:
+            return "/api/v2/experiences?filter[recommended]=true"
+        case .recentExperiences:
+            return "/api/v2/experiences"
+        case .searchExperiences(let searchText):
+            return "/api/v2/experiences?filter[title]=\(searchText)"
         case .experienceDetails(let id):
             return "/api/v2/experiences/\(id)"
         case .likeExperience(let id):
@@ -22,10 +31,10 @@ enum Api {
 
     var method: HTTPMethod {
         switch self {
-        case .experienceDetails:
-            return .get
         case .likeExperience:
             return .post
+        default:
+            return .get
         }
     }
 }

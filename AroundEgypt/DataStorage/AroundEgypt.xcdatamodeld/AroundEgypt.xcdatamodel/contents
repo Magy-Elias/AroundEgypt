@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CityModel" representedClassName="CityModel" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+    </entity>
+    <entity name="RecentExperiences" representedClassName="RecentExperiences" syncable="YES" codeGenerationType="class">
+        <attribute name="city" attributeType="Transformable"/>
+        <attribute name="coverPhoto" attributeType="String"/>
+        <attribute name="experienceDescription" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="likesNo" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="viewsNo" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="RecommendedExperiences" representedClassName="RecommendedExperiences" syncable="YES" codeGenerationType="class">
+        <attribute name="city" attributeType="Transformable"/>
+        <attribute name="coverPhoto" attributeType="String"/>
+        <attribute name="experienceDescription" attributeType="String"/>
+        <attribute name="id" attributeType="String"/>
+        <attribute name="likesNo" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="viewsNo" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+</model>

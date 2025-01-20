@@ -13,14 +13,13 @@ struct ExperienceDetailsScreenView: View {
     init(experienceId: String) {
         _viewModel = StateObject(wrappedValue: ExperienceDetailsScreenViewModel(experienceId: experienceId))
     }
-    
 
     var body: some View {
         LazyVStack {
             if let experienceDetails = viewModel.experienceDetails {
-                if let image = viewModel.image {
-                    ExperienceImageView(image: image, viewCount: experienceDetails.viewsNo)
-                }
+                ExperienceImageView(imageURL: experienceDetails.coverPhoto,
+                                    viewCount: experienceDetails.viewsNo,
+                                    showViewTitle: true)
 
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(alignment: .leading) {
@@ -29,7 +28,7 @@ struct ExperienceDetailsScreenView: View {
                                 .bold()
                             Spacer()
 
-                            likeView
+                            ExperienceLikeView(viewModel: ExperienceLikeViewModel(experienceId: experienceDetails.id, likesNo: experienceDetails.likesNo))
                         }
                         
                         Text("\(experienceDetails.city.name), Egypt.")
@@ -68,25 +67,4 @@ struct ExperienceDetailsScreenView: View {
         Text("Loading...")
             .padding(.horizontal)
     }
-
-    var likeView: some View {
-        HStack {
-            Button(action: {
-                viewModel.likeExperience()
-            }, label: {
-                Image(systemName: viewModel.likeImage)
-                    .foregroundColor(.pink)
-                    .frame(width: 15, height: 15)
-            })
-            .disabled(viewModel.isLiked)
-            
-            if let likesNo = viewModel.likesNo {
-                Text(likesNo, format: .number)
-            }
-        }
-    }
-}
-
-#Preview {
-    ExperienceDetailsScreenView(experienceId: "7f209d18-36a1-44d5-a0ed-b7eddfad48d6")
 }

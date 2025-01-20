@@ -17,6 +17,21 @@ class ApiService {
         self.urlSession = session
     }
 
+    func fetchRecommendedExperiences() -> AnyPublisher<ExperiencesListResponse, Error> {
+        let api = Api.recommendedExperiences
+        return performRequest(api: api, method: api.method)
+    }
+
+    func fetchRecentExperiences() -> AnyPublisher<ExperiencesListResponse, Error> {
+        let api = Api.recentExperiences
+        return performRequest(api: api, method: api.method)
+    }
+
+    func searchExperiences(searchText: String) -> AnyPublisher<ExperiencesListResponse, Error> {
+        let api = Api.searchExperiences(searchText: searchText)
+        return performRequest(api: api, method: api.method)
+    }
+
     func fetchExperienceDetails(id: String) -> AnyPublisher<ExperienceDetailsResponse, Error> {
         let api = Api.experienceDetails(id: id)
         return performRequest(api: api, method: api.method)
@@ -25,34 +40,6 @@ class ApiService {
     func likeExperience(id: String) -> AnyPublisher<ExperienceLikesResponse, Error> {
         let api = Api.likeExperience(id: id)
         return performRequest(api: api, method: api.method)
-    }
-
-    // Function to download an image from a URL
-    func downloadImage(from imageUrl: String) -> AnyPublisher<UIImage?, Error> {
-        guard let url = URL(string: imageUrl) else {
-            return Fail(error: URLError(.badURL))
-                .eraseToAnyPublisher()
-        }
-
-        // Use URLSession's dataTaskPublisher to fetch image data
-        return urlSession.dataTaskPublisher(for: url)
-            .tryMap { data, response in
-                // Check for valid HTTP response status codes
-                guard let httpResponse = response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    throw URLError(.badServerResponse)
-                }
-                return data
-            }
-            .map { data in
-                // Convert data into UIImage
-                return UIImage(data: data)
-            }
-            .mapError { error in
-                // Map any errors to a generic Error type
-                error as Error
-            }
-            .eraseToAnyPublisher()
     }
 
     private func performRequest<T: Codable>(api: Api, method: HTTPMethod = .get) -> AnyPublisher<T, Error> {
