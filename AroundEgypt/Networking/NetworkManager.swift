@@ -16,7 +16,13 @@ class NetworkManager {
 
     private init() {
         monitor.pathUpdateHandler = { path in
-            self.isConnected = path.status == .satisfied
+            if path.status == .satisfied {
+                let isWiFi = path.availableInterfaces.contains(where: { $0.type == .wifi })
+                print("Is Wi-Fi: \(isWiFi)")
+                self.isConnected = isWiFi
+            } else {
+                self.isConnected = false
+            }
         }
         monitor.start(queue: queue)
     }
